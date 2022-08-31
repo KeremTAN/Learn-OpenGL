@@ -12,9 +12,14 @@ set(PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/main.cpp
     ${PROJECT_SOURCE_DIR}/lib.cpp)
 
-    set(PROJECT_HEADERS
-    ${PROJECT_INCLUDE_DIR}/lib.hpp)
+set(PROJECT_HEADERS
+    ${PROJECT_INCLUDE_DIR}/lib.hpp
+    ${PROJECT_INCLUDE_DIR}/GLFW/glfw3.h
+    ${PROJECT_INCLUDE_DIR}/GLFW/glfw3.h
+    )
 
-    include_directories(${PROJECT_INCLUDE_DIR})
+include_directories(${PROJECT_INCLUDE_DIR})
 
-    add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+link_libraries(${PROJECT_DIR}/lib/libglfw.3.3.dylib)
+
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})

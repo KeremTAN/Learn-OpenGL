@@ -421,5 +421,10 @@ CMakeFiles/OpenGL.dir/src/main.cpp.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/_types/_nl_item.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h
+ /Users/kerem/Desktop/Codes/OpenGL/include/GLFW/glfw3.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/os/availability.h
  /Users/kerem/Desktop/Codes/OpenGL/include/lib.hpp
 
