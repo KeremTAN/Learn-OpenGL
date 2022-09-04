@@ -10,13 +10,12 @@ set (PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 
 set(PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/main.cpp
-    ${PROJECT_SOURCE_DIR}/lib.cpp
     ${PROJECT_SOURCE_DIR}/glad.c)
 
 set(PROJECT_HEADERS
-    ${PROJECT_INCLUDE_DIR}/lib.hpp
     ${PROJECT_INCLUDE_DIR}/GLFW/glfw3.h
-    ${PROJECT_INCLUDE_DIR}/GLFW/glfw3.h
+    ${PROJECT_INCLUDE_DIR}/glad/glad.h
+    ${PROJECT_INCLUDE_DIR}/KHR/khrplatform.h
     )
 
 include_directories(${PROJECT_INCLUDE_DIR})
