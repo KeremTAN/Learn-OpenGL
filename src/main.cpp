@@ -7,7 +7,10 @@
 float vertices[] = {
         -0.5f, -0.5f, 0.0f, // left  
          0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f  // top   
+         0.0f,  0.5f, 0.0f,  // top   
+         0.0f,  0.5f, 0.0f,
+         -0.5f, 0.8f, 0.0f,
+         0.5f,  0.8f, 0.0f 
 }; 
 
 int main(int argc, char** argv){
@@ -72,7 +75,7 @@ int main(int argc, char** argv){
         glBindVertexArray(vertexArrayObject);
 
 
-        glDrawArrays(GL_TRIANGLES,0,3);
+        glDrawArrays(GL_TRIANGLES,0,6);
         
         glfwSwapBuffers(window);
 

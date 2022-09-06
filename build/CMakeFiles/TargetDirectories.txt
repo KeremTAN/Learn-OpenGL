@@ -1,3 +1,0 @@
-/Users/kerem/Desktop/Codes/OpenGL/build/CMakeFiles/OpenGL.dir
-/Users/kerem/Desktop/Codes/OpenGL/build/CMakeFiles/edit_cache.dir
-/Users/kerem/Desktop/Codes/OpenGL/build/CMakeFiles/rebuild_cache.dir
