@@ -22,10 +22,18 @@ void ShaderProgram::link(){
         std::cout<<"ERROR -> Program Linking:"<<std::endl<<log<<std::endl;
     }
 }
+
 void ShaderProgram::use(){
     glUseProgram(m_ProgramId);
 }
 
+void ShaderProgram::addUniform(const std::string& varName){
+    m_UniformVars[varName] = glGetUniformLocation(m_ProgramId, varName.c_str());
+}
+
+void ShaderProgram::setFloat(const std::string& varName, float value){
+    glUniform1f(m_UniformVars[varName], value);
+}
 void ShaderProgram::attachShader(const char* fileName, unsigned int shaderType){
     unsigned int shaderId = glCreateShader(shaderType);
     std::string sourceCode = getShaderFromFile(fileName);
