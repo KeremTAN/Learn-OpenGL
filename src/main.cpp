@@ -1,16 +1,24 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include<glm/vec3.hpp>
+#include<glm/vec4.hpp>
 #include "shaderprogram.hpp"
 #include <string>
 
+float length =0.08f;
+glm::vec3 positon = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec4 color1 = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+glm::vec4 color2 = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+glm::vec4 color3 = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
 float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left  
-         0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f,  // top   
-         0.0f,  0.5f, 0.0f,
-         -0.8f, 0.7f, 0.0f,
-         0.8f,  0.7f, 0.0f 
+        -length/2,  length/2, 0,
+        -length/2, -length/2, 0,
+         length/2, -length/2, 0,
+
+        -length/2,  length/2, 0,
+         length/2, -length/2, 0,
+         length/2,  length/2, 0
 };
 unsigned int vertexArrayObject;
 unsigned int vertexBufferObject;
@@ -18,10 +26,18 @@ float moveInc = 0.0f;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
     if (key==GLFW_KEY_ESCAPE)
         glfwTerminate();
-    if (key==GLFW_KEY_LEFT)
-        moveInc-=0.05f;
-    if (key==GLFW_KEY_RIGHT)
-        moveInc+=0.05f;
+    if (action==GLFW_PRESS)
+    {
+        if (key==GLFW_KEY_A)
+            positon-=glm::vec3(length,0.0f,0.0f);
+        if (key==GLFW_KEY_D)
+            positon+=glm::vec3(length,0.0f,0.0f);
+        if (key==GLFW_KEY_W)
+            positon+=glm::vec3(0.0f,length,0.0f);
+        if (key==GLFW_KEY_S)
+            positon-=glm::vec3(0.0f,length,0.0f);
+    }
+    
 }
 int main(int argc, char** argv){
     if (!glfwInit())
@@ -53,7 +69,8 @@ int main(int argc, char** argv){
     program.attachShader("./shaders/simplevs.glsl",GL_VERTEX_SHADER);
     program.attachShader("./shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
     program.link();
-    program.addUniform("uMoveX");
+    program.addUniform("uMove");
+    program.addUniform("uColor");
 
     glGenVertexArrays(1, &vertexArrayObject);
 
@@ -77,12 +94,18 @@ int main(int argc, char** argv){
         glClear(GL_COLOR_BUFFER_BIT);
 
         program.use();
-        program.setFloat("uMoveX", moveInc);
-      
-        
         glBindVertexArray(vertexArrayObject);
 
+        program.setVec3("uMove",positon);
+        program.setVec4("uColor",color1);
+        glDrawArrays(GL_TRIANGLES,0,6);
 
+        program.setVec3("uMove",positon+glm::vec3(length,0.0f,0.0f));
+        program.setVec4("uColor",color2);
+        glDrawArrays(GL_TRIANGLES,0,6);
+
+        program.setVec3("uMove",positon+glm::vec3(length,-length,0.0f));
+        program.setVec4("uColor",color3);
         glDrawArrays(GL_TRIANGLES,0,6);
         
         glfwSwapBuffers(window);

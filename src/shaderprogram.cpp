@@ -34,6 +34,14 @@ void ShaderProgram::addUniform(const std::string& varName){
 void ShaderProgram::setFloat(const std::string& varName, float value){
     glUniform1f(m_UniformVars[varName], value);
 }
+void ShaderProgram::setVec3(const std::string& varName, const glm::vec3& value){
+    glUniform3f(m_UniformVars[varName], value.x,value.y,value.z);
+}
+
+void ShaderProgram::setVec4(const std::string& varName, const glm::vec4& value){
+    glUniform4f(m_UniformVars[varName], value.r,value.g,value.b,value.a);
+}
+
 void ShaderProgram::attachShader(const char* fileName, unsigned int shaderType){
     unsigned int shaderId = glCreateShader(shaderType);
     std::string sourceCode = getShaderFromFile(fileName);

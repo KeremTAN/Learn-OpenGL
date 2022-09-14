@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 FragColor;
-uniform float uMoveX;
+uniform vec4 uColor;
 void main()
 {
-    FragColor = vec4(0.0f+abs(uMoveX)/2, 1.0f-abs(uMoveX), 0.0f+abs(uMoveX), 1.0f);
+    FragColor = uColor;
 }
