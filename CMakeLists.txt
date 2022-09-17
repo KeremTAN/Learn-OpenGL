@@ -12,12 +12,14 @@ set(PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/main.cpp
     ${PROJECT_SOURCE_DIR}/glad.c
     ${PROJECT_SOURCE_DIR}/shaderprogram.cpp
+    ${PROJECT_SOURCE_DIR}/square.cpp
     )
 
 set(PROJECT_HEADERS
     ${PROJECT_INCLUDE_DIR}/GLFW/glfw3.h
     ${PROJECT_INCLUDE_DIR}/glad/glad.h
     ${PROJECT_INCLUDE_DIR}/KHR/khrplatform.h
+    ${PROJECT_INCLUDE_DIR}/glm/
     )
 
 include_directories(${PROJECT_INCLUDE_DIR})
