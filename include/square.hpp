@@ -13,8 +13,9 @@ public:
     Square(const float& x, const float& y, const float& length);
     glm::vec4   getColor();
     glm::vec3   getPosition();
-    void move();
-    void setDirection(DIRECTION newDirection);
+    void        move();
+    DIRECTION   getDirection();
+    void        setDirection(DIRECTION newDirection);
 private:
     glm::vec4   m_Color;
     glm::vec3   m_Position;

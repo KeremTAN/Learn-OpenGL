@@ -3,18 +3,14 @@
 #include <GLFW/glfw3.h>
 #include<glm/vec3.hpp>
 #include<glm/vec4.hpp>
-#include "shaderprogram.hpp"
-#include "square.hpp"
 #include <string>
 #include <thread>
 #include <chrono>
+#include <vector>
+#include "shaderprogram.hpp"
+#include "square.hpp"
 
 float length =0.08f;
-Square square1(0.0f,0.0f,length);
-glm::vec3 positon = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec4 color1 = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-glm::vec4 color2 = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-glm::vec4 color3 = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
 float vertices[] = {
         -length/2,  length/2, 0,
         -length/2, -length/2, 0,
@@ -24,22 +20,86 @@ float vertices[] = {
          length/2, -length/2, 0,
          length/2,  length/2, 0
 };
+std::vector<Square*>    snakeList;
+
+
 unsigned int vertexArrayObject;
 unsigned int vertexBufferObject;
-float moveInc = 0.0f;
+
+void moveSnake(){
+    
+    for (auto s : snakeList)
+        s->move();
+    
+    for (int i = snakeList.size()-1; i>0; i--)
+    {
+        snakeList[i]->setDirection(snakeList[i-1]->getDirection());
+      
+    }
+    
+}
+
+void drawSnake(ShaderProgram& program){
+    for (auto next : snakeList)
+        {
+            program.setVec3("uMove",next->getPosition());
+            program.setVec4("uColor",next->getColor());
+            glDrawArrays(GL_TRIANGLES,0,6);
+        }
+}
+
+void addToSnakeTail(){
+    int snakeSize = snakeList.size();
+    if (snakeSize==0){
+        snakeList.push_back(new Square(0.0f,0.0f, length));
+    }
+    else{
+        Square* lastSquare = snakeList[snakeSize-1]; 
+        glm::vec3 posOfLS = lastSquare->getPosition();
+        Square::DIRECTION dirOfLS = lastSquare->getDirection();
+        switch (dirOfLS)
+        {
+            case Square::DIR_RIGHT:
+                posOfLS-=glm::vec3(length,0.0f,0.0f);
+                break;
+            case Square::DIR_LEFT:
+                posOfLS+=glm::vec3(length,0.0f,0.0f);
+                break;
+            case Square::DIR_UP:
+                posOfLS-=glm::vec3(0.0f,length,0.0f);
+                break;
+            case Square::DIR_DOWN:
+                posOfLS+=glm::vec3(0.0f,length,0.0f);
+                break;
+            default:
+                break;
+        }
+        Square* newSquare = new Square(posOfLS.x, posOfLS.y, length);
+        newSquare->setDirection(dirOfLS);
+        snakeList.push_back(newSquare);
+    }  
+}
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
     if (key==GLFW_KEY_ESCAPE)
         glfwTerminate();
     if (action==GLFW_PRESS)
     {
-        if (key==GLFW_KEY_A)
-            square1.setDirection(Square::DIR_LEFT);
-        if (key==GLFW_KEY_D)
-            square1.setDirection(Square::DIR_RIGHT);
-        if (key==GLFW_KEY_W)
-            square1.setDirection(Square::DIR_UP);
-        if (key==GLFW_KEY_S)
-            square1.setDirection(Square::DIR_DOWN);
+        if (snakeList.size()!=0)
+        {
+            Square* first = snakeList[0];
+            if (key==GLFW_KEY_A);
+                first->setDirection(Square::DIR_LEFT);
+            if (key==GLFW_KEY_D)
+                first->setDirection(Square::DIR_RIGHT);
+            if (key==GLFW_KEY_W)
+                first->setDirection(Square::DIR_UP);
+            if (key==GLFW_KEY_S)
+                first->setDirection(Square::DIR_DOWN);
+            if (key==GLFW_KEY_SPACE)
+                addToSnakeTail();
+        }
+        
     }
     
 }
@@ -69,6 +129,13 @@ int main(int argc, char** argv){
          std::cout<<"Failed to initilaze GLAD\n";
          return -1;
     }
+
+    addToSnakeTail();
+    addToSnakeTail();
+    addToSnakeTail();
+    addToSnakeTail();
+    addToSnakeTail();
+
     ShaderProgram program;
     program.attachShader("./shaders/simplevs.glsl",GL_VERTEX_SHADER);
     program.attachShader("./shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
@@ -100,11 +167,9 @@ int main(int argc, char** argv){
         program.use();
         glBindVertexArray(vertexArrayObject);
 
-        program.setVec3("uMove",square1.getPosition());
-        program.setVec4("uColor",square1.getColor());
-        glDrawArrays(GL_TRIANGLES,0,6);
+        drawSnake(program);
+        moveSnake();
 
-        square1.move();
         std::this_thread::sleep_for(std::chrono::milliseconds(60));
 
         glfwSwapBuffers(window);

@@ -11,8 +11,11 @@ Square::Square(const float& x, const float& y, const float& length){
     m_Color.b=(10+std::rand()%15)/25.0;
 }
 glm::vec4 Square::getColor(){ return m_Color; }
+
 glm::vec3 Square::getPosition(){ return m_Position; }
+
 void Square::move(){
+
     switch (m_Direction)
     {
     case DIR_RIGHT:
@@ -31,6 +34,9 @@ void Square::move(){
     default:
         break;
     }
+}
+Square::DIRECTION Square::getDirection(){
+    return m_Direction;
 }
 void Square::setDirection(Square::DIRECTION newDirection){
     m_Direction=newDirection;
