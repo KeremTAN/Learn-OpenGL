@@ -10,12 +10,21 @@
 #include "shaderprogram.hpp"
 
 #define radian(angle) (angle*3.141592653589793/180)
-std::vector<glm::vec3> vertices;
+
+std::vector<glm::vec3>      vertices;
+std::vector<unsigned int>   indicies;
+
 unsigned int vertexArrayObject;
 unsigned int vertexBufferObject;
+unsigned int elementBufferObject; // indexBufferObject
 
+// 0 1 2
+// 0 2 3
+// 0 3 4
+// ...
+// 0 10 11
 void createCircle(const float& radius, const float& vertexCount){
-    float angle = 360.0f/vertexCount;
+    float angle = 360.0f/vertexCount; // f onemli, yoksa yuvarlama yapar;
     int triangleCount = vertexCount -2;
     std::vector<glm::vec3> tempVertices;
     for (int i = 0; i < vertexCount; i++)
@@ -24,13 +33,14 @@ void createCircle(const float& radius, const float& vertexCount){
         float x = radius*cos(radian(newAngle));
         float y = radius*sin(radian(newAngle));
         float z = 0.0f;
-        tempVertices.push_back(glm::vec3(x,y,z));
+        vertices.push_back(glm::vec3(x,y,z));
     }
+
     for (int i = 0; i < triangleCount; i++)
     {
-        vertices.push_back(tempVertices[0]);
-        vertices.push_back(tempVertices[i+1]);
-        vertices.push_back(tempVertices[i+2]);
+        indicies.push_back(0);
+        indicies.push_back(i+1);
+        indicies.push_back(i+2);
     }
     
 }
@@ -40,7 +50,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwTerminate();
     if (action==GLFW_PRESS)
     {
-        if (key==GLFW_KEY_A); {}
+        if (key==GLFW_KEY_A) {}
         if (key==GLFW_KEY_D) {}
         if (key==GLFW_KEY_W) {}
         if (key==GLFW_KEY_S) {}
@@ -74,7 +84,7 @@ int main(int argc, char** argv){
          return -1;
     }
 
-    createCircle(1,12);
+    createCircle(1,74);
 
     ShaderProgram program;
     program.attachShader("./shaders/simplevs.glsl",GL_VERTEX_SHADER);
@@ -87,6 +97,7 @@ int main(int argc, char** argv){
 
     glGenBuffers(1, &vertexBufferObject);
 
+    glGenBuffers(1, &elementBufferObject);
 
     glBindVertexArray(vertexArrayObject);
 
@@ -96,8 +107,13 @@ int main(int argc, char** argv){
 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(float)*3,(void*)0);
 
-    // 0. slotu aktif ettik.
     glEnableVertexAttribArray(0);
+
+    //----
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject); //bind buffer ile EBO aktif ettik.
+
+     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indicies.size(), &indicies[0], GL_STATIC_DRAW);
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -107,9 +123,9 @@ int main(int argc, char** argv){
         glBindVertexArray(vertexArrayObject);
 
         program.setVec3("uMove",glm::vec3(0.0f,0.0f,0.0f));
-        program.setVec4("uColor", glm::vec4(1.0f,0.0f,0.0f,0.0f));
+        program.setVec4("uColor", glm::vec4(0.6f,1.0f,1.0f,0.0f));
 
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        glDrawElements(GL_TRIANGLES, indicies.size(), GL_UNSIGNED_INT, 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(60));
 
         glfwSwapBuffers(window);
