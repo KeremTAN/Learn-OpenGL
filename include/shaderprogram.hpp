@@ -4,6 +4,7 @@
 #include<unordered_map>
 #include<glm/vec3.hpp>
 #include<glm/vec4.hpp>
+#include<glm/mat3x3.hpp>
 class ShaderProgram {
 public:
     ShaderProgram();
@@ -15,6 +16,7 @@ public:
     void setFloat(const std::string& varName, float value);
     void setVec3(const std::string& varName, const glm::vec3& value);
     void setVec4(const std::string& varName, const glm::vec4& value);
+    void setMat3(const std::string& varName, const glm::mat3* ptrValue);
 private:
     std::string getShaderFromFile(const char* fileName);
     std::unordered_map<std::string, unsigned int> m_UniformVars;

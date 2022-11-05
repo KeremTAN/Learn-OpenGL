@@ -8,7 +8,11 @@
 #include <chrono>
 #include <vector>
 #include "shaderprogram.hpp"
-
+#include <glm/gtx/matrix_transform_2d.hpp> 
+// Rotation(Dondurme) Scale(Olcekleme) Translation(Oteleme)
+// SxRxT islemleri sirasiyla yapilmalidir.
+// SxRxT = Toplam Donusum Matrisi(Dunya Matrisi)
+// gtx/...2d s,r,t islemleri icin
 #define radian(angle) (angle*3.141592653589793/180)
 
 std::vector<glm::vec3>      vertices;
@@ -84,13 +88,17 @@ int main(int argc, char** argv){
          return -1;
     }
 
-    createCircle(1,74);
+    createCircle(1,18);
+    //********** S R T ********** //
+    glm::mat3 mtxTransform(1); //3x3 birim matris
+    float rotationAngle=0.0f;
+
 
     ShaderProgram program;
     program.attachShader("./shaders/simplevs.glsl",GL_VERTEX_SHADER);
     program.attachShader("./shaders/simplefs.glsl",GL_FRAGMENT_SHADER);
     program.link();
-    program.addUniform("uMove");
+    program.addUniform("uMtxTransform");
     program.addUniform("uColor");
 
     glGenVertexArrays(1, &vertexArrayObject);
@@ -118,12 +126,13 @@ int main(int argc, char** argv){
     {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
+        mtxTransform = glm::rotate(glm::mat3(1),glm::radians(rotationAngle));
+        rotationAngle+=1.0f;
         program.use();
         glBindVertexArray(vertexArrayObject);
 
-        program.setVec3("uMove",glm::vec3(0.0f,0.0f,0.0f));
         program.setVec4("uColor", glm::vec4(0.6f,1.0f,1.0f,0.0f));
+        program.setMat3("uMtxTransform", &mtxTransform);
 
         glDrawElements(GL_TRIANGLES, indicies.size(), GL_UNSIGNED_INT, 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(60));
