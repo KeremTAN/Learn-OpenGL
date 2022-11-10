@@ -10,13 +10,17 @@
 #include "shaderprogram.hpp"
 #include <glm/gtx/matrix_transform_2d.hpp> 
 // Rotation(Dondurme) Scale(Olcekleme) Translation(Oteleme)
-// SxRxT islemleri sirasiyla yapilmalidir.
-// SxRxT = Toplam Donusum Matrisi(Dunya Matrisi)
+// TxRxS islemleri sirasiyla yapilmalidir.
+// TxRxS = Toplam Donusum Matrisi(Dunya Matrisi)
 // gtx/...2d s,r,t islemleri icin
 #define radian(angle) (angle*3.141592653589793/180)
 
 std::vector<glm::vec3>      vertices;
 std::vector<unsigned int>   indicies;
+
+float rotationAngle;
+glm::vec2 tranformPosition;
+float scale;
 
 unsigned int vertexArrayObject;
 unsigned int vertexBufferObject;
@@ -36,7 +40,7 @@ void createCircle(const float& radius, const float& vertexCount){
         float newAngle=angle*i;
         float x = radius*cos(radian(newAngle));
         float y = radius*sin(radian(newAngle));
-        float z = 0.0f;
+        float z = 1.0f;
         vertices.push_back(glm::vec3(x,y,z));
     }
 
@@ -54,13 +58,29 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwTerminate();
     if (action==GLFW_PRESS)
     {
-        if (key==GLFW_KEY_A) {}
-        if (key==GLFW_KEY_D) {}
-        if (key==GLFW_KEY_W) {}
-        if (key==GLFW_KEY_S) {}
+        if (key==GLFW_KEY_A) {
+            tranformPosition.x-=0.05f;
+        }
+        if (key==GLFW_KEY_D) {
+            tranformPosition.x+=0.05f;
+        }
+        if (key==GLFW_KEY_W) {
+            tranformPosition.y+=0.05f;
+        }
+        if (key==GLFW_KEY_S) {
+            tranformPosition.y-=0.05f;
+        }
+        if (key==GLFW_KEY_Q) {
+            scale+=0.05f;
+        }
+        if (key==GLFW_KEY_E) {
+            if(scale!=0.005f)
+                scale-=0.05f;
+        }
         if (key==GLFW_KEY_SPACE) {}   
     }
 }
+
 int main(int argc, char** argv){
     if (!glfwInit())
         return -1;
@@ -88,10 +108,12 @@ int main(int argc, char** argv){
          return -1;
     }
 
-    createCircle(1,18);
-    //********** S R T ********** //
+    createCircle(0.2,10);
+    //********** T R S ********** //
     glm::mat3 mtxTransform(1); //3x3 birim matris
-    float rotationAngle=0.0f;
+    rotationAngle=0.0f;
+    tranformPosition=glm::vec2(0.0f,0.0f);
+    scale=1.0f;
 
 
     ShaderProgram program;
@@ -126,7 +148,18 @@ int main(int argc, char** argv){
     {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        mtxTransform = glm::rotate(glm::mat3(1),glm::radians(rotationAngle));
+        /*
+        glm::mat3 mtxTranslation = glm::translate(glm::mat3(1), tranformPosition);
+        glm::mat3 mtxRotation = glm::rotate(glm::mat3(1),glm::radians(rotationAngle));
+        glm::mat3 mtxScale = glm::scale(glm::mat3(1), glm::vec2(scale,scale));
+        mtxTransform=mtxTranslation * mtxRotation * mtxScale;
+        */
+        glm::mat3 mtxTranslation = glm::translate(glm::mat3(1), tranformPosition);
+        glm::mat3 mtxRotation = glm::rotate(mtxTranslation,glm::radians(rotationAngle));
+        glm::mat3 mtxScale = glm::scale(mtxRotation, glm::vec2(scale,scale));
+        mtxTransform= mtxScale;
+
+
         rotationAngle+=1.0f;
         program.use();
         glBindVertexArray(vertexArrayObject);
