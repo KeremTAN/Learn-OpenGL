@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
+set (CMAKE_BUILD_TYPE Debug)
+
 project(OpenGL)
 
 set (PROJECT_DIR ${CMAKE_SOURCE_DIR})
@@ -20,6 +22,7 @@ set(PROJECT_HEADERS
     ${PROJECT_INCLUDE_DIR}/glad/glad.h
     ${PROJECT_INCLUDE_DIR}/KHR/khrplatform.h
     ${PROJECT_INCLUDE_DIR}/glm/
+    ${PROJECT_INCLUDE_DIR}/stb/
     )
 
 include_directories(${PROJECT_INCLUDE_DIR})

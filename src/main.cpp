@@ -9,13 +9,22 @@
 #include <vector>
 #include "shaderprogram.hpp"
 #include <glm/gtx/matrix_transform_2d.hpp> 
+#include "square.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 // Rotation(Dondurme) Scale(Olcekleme) Translation(Oteleme)
 // TxRxS islemleri sirasiyla yapilmalidir.
 // TxRxS = Toplam Donusum Matrisi(Dunya Matrisi)
 // gtx/...2d s,r,t islemleri icin
 #define radian(angle) (angle*3.141592653589793/180)
 
-std::vector<glm::vec3>      vertices;
+struct Vertex{
+    glm::vec3 pos;
+    glm::vec2 tex;
+};
+std::vector<Vertex>         vertices;
 std::vector<unsigned int>   indicies;
 
 float rotationAngle;
@@ -25,32 +34,32 @@ float scale;
 unsigned int vertexArrayObject;
 unsigned int vertexBufferObject;
 unsigned int elementBufferObject; // indexBufferObject
+unsigned int texture;
 
-// 0 1 2
-// 0 2 3
-// 0 3 4
-// ...
-// 0 10 11
-void createCircle(const float& radius, const float& vertexCount){
-    float angle = 360.0f/vertexCount; // f onemli, yoksa yuvarlama yapar;
-    int triangleCount = vertexCount -2;
-    std::vector<glm::vec3> tempVertices;
-    for (int i = 0; i < vertexCount; i++)
-    {
-        float newAngle=angle*i;
-        float x = radius*cos(radian(newAngle));
-        float y = radius*sin(radian(newAngle));
-        float z = 1.0f;
-        vertices.push_back(glm::vec3(x,y,z));
-    }
+void createSquare(const float& length){
+    Vertex v0, v1, v2, v3;
+    v0.pos=glm::vec3(-length/2, length/2, 0.0f);
+    v1.pos=glm::vec3(-length/2,-length/2, 0.0f);
+    v2.pos=glm::vec3( length/2,-length/2, 0.0f);
+    v3.pos=glm::vec3( length/2, length/2, 0.0f);
 
-    for (int i = 0; i < triangleCount; i++)
-    {
-        indicies.push_back(0);
-        indicies.push_back(i+1);
-        indicies.push_back(i+2);
-    }
-    
+    v0.tex=glm::vec2(0.0f, 1.0f);
+    v1.tex=glm::vec2(0.0f, 0.0f);
+    v2.tex=glm::vec2(1.0f, 0.0f);
+    v3.tex=glm::vec2(1.0f, 1.0f);
+
+    vertices.push_back(v0);
+    vertices.push_back(v1);
+    vertices.push_back(v2);
+    vertices.push_back(v3);
+
+    indicies.push_back(0);
+    indicies.push_back(1);
+    indicies.push_back(3);
+
+    indicies.push_back(1);
+    indicies.push_back(2);
+    indicies.push_back(3);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
@@ -108,7 +117,24 @@ int main(int argc, char** argv){
          return -1;
     }
 
-    createCircle(0.2,10);
+// SQUARE TEXTURE
+    createSquare(1);
+
+    int width, height, nrChannels; 
+    unsigned char* data = stbi_load("./images/container.jpg",&width,&height,&nrChannels,0);
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(data);
+
     //********** T R S ********** //
     glm::mat3 mtxTransform(1); //3x3 birim matris
     rotationAngle=0.0f;
@@ -133,11 +159,17 @@ int main(int argc, char** argv){
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(float)*3,(void*)0);
+    //POSITION
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(float)*5,(void*)0);
 
     glEnableVertexAttribArray(0);
+
+    //TEXTURE
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(float)*5,(void*)(3*sizeof(float)));
+
+    glEnableVertexAttribArray(1);
 
     //----
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject); //bind buffer ile EBO aktif ettik.
@@ -162,6 +194,9 @@ int main(int argc, char** argv){
 
         rotationAngle+=1.0f;
         program.use();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
         glBindVertexArray(vertexArrayObject);
 
         program.setVec4("uColor", glm::vec4(0.6f,1.0f,1.0f,0.0f));
