@@ -10,9 +10,7 @@
 #include "shaderprogram.hpp"
 #include <glm/gtx/matrix_transform_2d.hpp> 
 #include "square.hpp"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
+#include "texturemanager.hpp"
 
 // Rotation(Dondurme) Scale(Olcekleme) Translation(Oteleme)
 // TxRxS islemleri sirasiyla yapilmalidir.
@@ -121,19 +119,7 @@ int main(int argc, char** argv){
     createSquare(1);
 
     int width, height, nrChannels; 
-    unsigned char* data = stbi_load("./images/container.jpg",&width,&height,&nrChannels,0);
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_image_free(data);
+    texture = TextureManager::getInstance()->loadTexture("./images/container.jpg");
 
     //********** T R S ********** //
     glm::mat3 mtxTransform(1); //3x3 birim matris
@@ -181,10 +167,7 @@ int main(int argc, char** argv){
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         /*
-        glm::mat3 mtxTranslation = glm::translate(glm::mat3(1), tranformPosition);
-        glm::mat3 mtxRotation = glm::rotate(glm::mat3(1),glm::radians(rotationAngle));
-        glm::mat3 mtxScale = glm::scale(glm::mat3(1), glm::vec2(scale,scale));
-        mtxTransform=mtxTranslation * mtxRotation * mtxScale;
+           mtxTranslation * mtxRotation * mtxScale;
         */
         glm::mat3 mtxTranslation = glm::translate(glm::mat3(1), tranformPosition);
         glm::mat3 mtxRotation = glm::rotate(mtxTranslation,glm::radians(rotationAngle));
@@ -194,8 +177,7 @@ int main(int argc, char** argv){
 
         rotationAngle+=1.0f;
         program.use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        TextureManager::getInstance()->activeTexture(GL_TEXTURE0, texture);
 
         glBindVertexArray(vertexArrayObject);
 
