@@ -11,7 +11,7 @@
     * [Step 7 - Rasterization](#step7)
     * [Step 8 - Fragment Shader](#step8)
     * [Step 9 - Per-Sample Operations](#step9)
-* [Some Functions and Their Definitions](#sfatd)
+<!-- * [Some Functions and Their Definitions](#sfatd) -->
 
 <a name="aim"></a>
 
@@ -52,42 +52,79 @@ Also, the code example belong to Mr. Kayhan AYAR.
 <a name="step1"></a>
 
 #### Step 1 - Vertex Specification
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+&nbsp; For example, we want to draw a triangle on the monitor. </br>
+&nbsp; Each point of the triangle to be drawn is called <b>a vertex</b> and <b>each vertex</b> has x, y and z coordinates data in the drawing area. </br>
+
+&nbsp; Simple shapes drawn using vertices are also called <b>primitives</b>. </br>
+&nbsp; The triangle shape which wanted to draw that is <b>a primitive</b> in this  example. </br>
+
+&nbsp; <b> The vertices data are set for the primitive/primitives can be rendered in Vertex Specification</b>. </br>
 
 <a name="step2"></a>
 
 #### Step 2 - Vertex Shader
 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+
+&nbsp; Some interventions are made using the <b>GLSL commands</b> in this step.</br>
+&nbsp; The vertex data sent in the previous step that is preserved after defining the priority order (location=0) of vertex shader with GLSL commands.</br> 
+
+&nbsp; Moreover, the vector sent in the previous step that <b>is transformed from a 3-element vector (x, y, z coordinates) to a 4-element vector</b> in this step. To do this transformation, 1 is added to the end of the vertex data.  </br>
+&nbsp; In this way, the new vector is converted to <b>[x, y, z, 1]</b>.</br>
+
+&nbsp; <b>The purpose of this vector transformation is so that the matrix multiplication can be done correctly </b> in the next steps because the matrices which will be used in the next steps have 4 elements.  </br>
+
+&nbsp; The reason for adding 1 to end of the vertices data which is that <b>the number 1 is an ineffective element in the multiplication process</b>.  </br>
+
+&nbsp; <b>In other words, the purpose is that the matrix multiplications in the next steps can be done without distorting the original data</b>.  </br>
+
 <a name="step3"></a>
 
 #### Step 3 - Tessellation
+
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+
 
 <a name="step4"></a>
 
 #### Step 4 - Geometry Shader
 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+
 <a name="step5"></a>
 
 #### Step 5 - Vertex Post-Processing
+
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
 
 <a name="step6"></a>
 
 #### Step 6 - Primitive Assembly
 
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+
 <a name="step7"></a>
 
 #### Step 7 - Rasterization
+
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
 
 <a name="step8"></a>
 
 #### Step 8 - Fragment Shader
 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+
 <a name="step9"></a>
 
 #### Step 9 - Per-Sample Operations
 
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+
 <a name="sfatd"></a>
 
-##  <b> Some Functions and Their Definitions </b>
+<!-- ##  <b> Some Functions and Their Definitions </b> -->
 
 
 
