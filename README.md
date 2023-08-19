@@ -54,9 +54,9 @@ Also, the code example belong to Mr. Kayhan AYAR.
 #### Step 1 - Vertex Specification
 &nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
 &nbsp; For example, we want to draw a triangle on the monitor. </br>
-&nbsp; Each point of the triangle to be drawn is called <b>a vertex</b> and <b>each vertex</b> has x, y and z coordinates data in the drawing area. </br>
+&nbsp; Each corner point of the triangle to be drawn is called <b>a vertex</b> and <b>each vertex</b> has x, y and z coordinates data in the drawing area.</br>
 
-&nbsp; Simple shapes drawn using vertices are also called <b>primitives</b>. </br>
+&nbsp; Simple shapes drawn using vertices are called <b>primitives</b>.</br>
 &nbsp; The triangle shape which wanted to draw that is <b>a primitive</b> in this  example. </br>
 
 &nbsp; <b> The vertices data are set for the primitive/primitives can be rendered in Vertex Specification</b>. </br>
@@ -65,10 +65,13 @@ Also, the code example belong to Mr. Kayhan AYAR.
 
 #### Step 2 - Vertex Shader
 
-&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader. <p> 
 
-&nbsp; Some interventions are made using the <b>GLSL commands</b> in this step.</br>
-&nbsp; The vertex data sent in the previous step that is preserved after defining the priority order (location=0) of vertex shader with GLSL commands.</br> 
+&nbsp; <b>The aim of Vertex Shader</b> is to geometrically calculate the position and features of the 2D/3D model to be created by using vertices. </br>
+&nbsp; Some interventions are made using with <b>GLSL commands</b> in this step.</br>
+&nbsp; The vertex data sent from previous step to this step comes as <b>bit data</b>.</br>
+&nbsp; The type of the bit data <b>can be labeled</b> when writing GLSL commands in this step.</br>
+&nbsp; For example, <b><i>layout(location=0)</i></b> command is used to indicate that the vertex data received in the previous step is <b>a location data</b>.</br> 
 
 &nbsp; Moreover, the vector sent in the previous step that <b>is transformed from a 3-element vector (x, y, z coordinates) to a 4-element vector</b> in this step. To do this transformation, 1 is added to the end of the vertex data.  </br>
 &nbsp; In this way, the new vector is converted to <b>[x, y, z, 1]</b>.</br>
@@ -83,44 +86,63 @@ Also, the code example belong to Mr. Kayhan AYAR.
 
 #### Step 3 - Tessellation
 
-&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Tessellation.<p> 
 
+&nbsp; The data sent from previous step can be <b>converted into smaller primitives</b> in this step because <b> more detail and complexity can be added </b> dynamically to 3D surfaces by breaking the primitives into smaller pieces. </br>
+&nbsp; <b>The model/shape</b> which wanted to create that can be <b>converted more realistic</b> in this way. </br>
 
 <a name="step4"></a>
 
 #### Step 4 - Geometry Shader
 
-&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Geometry Shader.<p> 
+
+&nbsp; Geometry Shader is <b>logically similar</b> to Vertex Shader. </br>
+&nbsp; <b>More complex and new primitives are created by using the primitives</b> sent from the previous step <b> in the Geometry Shader</b>, just like geometric shapes are created by using vertices in the Vertex Shader. </br>
+
+&nbsp; For example, a hexagon are created by using triangle shapes. </br>
 
 <a name="step5"></a>
 
 #### Step 5 - Vertex Post-Processing
 
-&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Post-Processing.<p>
+
+&nbsp; <b>Values calculated in Vertex and Geometry Shader can be saved</b> in this step if wish.<p>
+&nbsp; In addition, <b>clipping processing</b> is done in here. </br>
+&nbsp; <b>The drawing area</b> which contains the shape wanted to create <b>can be larger than the monitor</b> on which the shape will be displayed. </br>
+&nbsp; Unnecessary calculations are prevented by removing primitives that cannot be displayed on the monitor from the drawing screen in this step.</br>
 
 <a name="step6"></a>
 
 #### Step 6 - Primitive Assembly
 
-&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Primitive Assembly.<p>
+
+&nbsp; Vertices are processed as a series and new shapes are rendered from these series.</br>
+&nbsp; For example, drawing 3 triangles from a 9-element vertex series.</br>
+
+&nbsp; In addition, <b>Face Culling</b> is done in this step. </br>
+&nbsp; <b>Face Culling means processing that</b> primitives that are in our drawing area but invisible or too far to be seen in perspective are removed from the drawing area.</br>
 
 <a name="step7"></a>
 
 #### Step 7 - Rasterization
 
-&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Rasterization.<p>
+
 
 <a name="step8"></a>
 
 #### Step 8 - Fragment Shader
 
-&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Vertex Shader.  <p> 
+&nbsp; The programmer <b>can</b> do <b>some</b> changings or interventions in Fragment Shader.  <p> 
 
 <a name="step9"></a>
 
 #### Step 9 - Per-Sample Operations
 
-&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in Vertex Specification.  <p>
+&nbsp; The programmer <b>can not</b> do <b>any</b> changing or interventions in  Per-Sample Operations.  <p>
 
 <a name="sfatd"></a>
 
