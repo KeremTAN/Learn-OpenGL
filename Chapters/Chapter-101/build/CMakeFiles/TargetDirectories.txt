@@ -1,3 +1,0 @@
-/Users/kerem/Desktop/UDEMY-Examples/Udemy-OpenGL-101/build/CMakeFiles/Udemy-OpenGL.dir
-/Users/kerem/Desktop/UDEMY-Examples/Udemy-OpenGL-101/build/CMakeFiles/edit_cache.dir
-/Users/kerem/Desktop/UDEMY-Examples/Udemy-OpenGL-101/build/CMakeFiles/rebuild_cache.dir
