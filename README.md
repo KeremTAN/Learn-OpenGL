@@ -19,9 +19,10 @@
 ## <b> Aim of This Repository </b>
 &nbsp; The aim of this project is to study how 3D computations and linear algebra are implemented in computer science with the OpenGL library.
 
+<!--
 &nbsp; While I work on the OpenGL library, I do mainly benefit from the OpenGL library introductory training series of Mr. Kayhan AYAR, which can be found in the link here https://www.youtube.com/watch?v=_MhmHNbnhSs&list=PLIM5iw4GHbNW2nleNK5XIvyhZzGiaiBfp. </br>
 Also, the code example belong to Mr. Kayhan AYAR.
-
+-->
 &nbsp; For example; How to use theory of light in OpenGL or what are the functions used in OpenGL and OpenGL auxiliary libraries and what they do, etc.
 
 <a name="siao"></a>
